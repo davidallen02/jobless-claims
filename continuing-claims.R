@@ -6,29 +6,14 @@ p <- readxl::read_excel(path = "data.xlsx", sheet = "injcuito", skip = 3) %>%
   set_colnames(c("dates","continuing_claims")) %>%
   dplyr::slice_max(dates, n = 52) %>%
   ggplot2::ggplot(ggplot2::aes(dates, continuing_claims)) +
-  ggplot2::geom_line(size = 2, color = "#850237") +
-  ggplot2::labs(
-    title = "Continuing Unemployment Claims",
-    subtitle = "Thousands"
-  ) +
-  ggplot2::scale_y_continuous(labels = scales::comma) +
-  ggplot2::theme(
-    plot.title = ggplot2::element_text(face = "bold", size = ggplot2::rel(3.25)),
-    plot.subtitle = ggplot2::element_text(size = ggplot2::rel(2)),
-    legend.title = ggplot2::element_blank(),
-    legend.text = ggplot2::element_text(size = ggplot2::rel(1.5)),
-    legend.position = "bottom",
-    axis.title = ggplot2::element_blank(),
-    axis.text = ggplot2::element_text(size = ggplot2::rel(1.5))
-  )
+  ggplot2::geom_line(size = 2, color = "#850237") 
 
-ggplot2::ggsave(
-  filename = "state-fed-continuing-claims.png",
-  plot     = p,
-  width    = 13.33,
-  height   = 6.75,
-  units    = 'in'
-)
+p %>%
+  pamngr::pam.plot(
+    plot.title = "Continuing Unemployment Claims",
+    plot.subtitle = "Thousands"
+  ) %>%
+  pamngr::ppt_output("state-fed-continuing-claims.png")
 
 injcuirs <- pamngr::get_data("injcuirs") 
 injcuife <- pamngr::get_data("injcuife") 
@@ -74,8 +59,7 @@ q <- regular %>%
   reshape2::melt(id.vars = "dates") %>%
   ggplot2::ggplot(ggplot2::aes(dates, value, fill = variable)) + 
   ggplot2::geom_area() +
-  ggplot2::scale_fill_manual(values = c("#850237", "black")) +
-  ggplot2::scale_y_continuous(labels = scales::comma)
+  ggplot2::scale_fill_manual(values = c("#850237", "black")) 
 
 
 q %>%

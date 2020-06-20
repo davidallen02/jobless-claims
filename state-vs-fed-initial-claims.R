@@ -1,20 +1,19 @@
 devtools::install_github("davidallen02/pamngr")
-
 library(magrittr)
 
 state.claims <- readxl::read_excel(path = "data.xlsx", sheet = "injcjc", skip = 2)
-fed.claims <- readxl::read_excel(path = "data.xlsx", sheet = "injcpua", skip = 2)
+fed.claims   <- readxl::read_excel(path = "data.xlsx", sheet = "injcpua", skip = 2)
 
 claims <- state.claims %>%
   dplyr::left_join(fed.claims, by = "Dates") %>%
-  set_colnames(c("dates","state-claims","federal-claims")) %>%
+  set_colnames(c("dates","regular-programs","emergency-programs")) %>%
   dplyr::slice_max(dates, n = 20) %>%
   reshape2::melt(id.vars = "dates") %>%
   dplyr::mutate(
     variable = variable %>% 
       stringr::str_replace_all("-", " ") %>%
       stringr::str_to_title() %>%
-      factor(levels = c("Federal Claims","State Claims"))
+      factor(levels = c("Emergency Programs","Regular Programs"))
   )
 
 p <- claims %>%
@@ -24,22 +23,15 @@ p <- claims %>%
 
 p %>%
   pamngr::pam.plot(
-    plot.title = "Initial Unemployment Claims",
-    plot.subtitle = "Thousands"
-  ) %>%
+    plot.title    = "Initial Unemployment Claims",
+    plot.subtitle = "Thousands") %>%
   pamngr::ppt_output("initial-claims.png")
 
-q <- p + 
-  ggplot2::facet_wrap(ggplot2::vars(variable), ncol = 2) +
-  ggplot2::theme(
-    legend.position = 'none',
-    strip.text = ggplot2::element_text(size = ggplot2::rel(1.5))
-  )
+q <- p + ggplot2::facet_wrap(ggplot2::vars(variable), ncol = 2) 
 
-ggplot2::ggsave(
-  filename = "fed-vs-state-claims.png",
-  plot     = q,
-  width    = 13.33,
-  height   = 6.75,
-  units    = 'in'
-)
+q %>% pamngr::pam.plot(
+  plot.title = "Initial Unemployment Claims",
+  plot.subtitle = "Thousands",
+  show.legend = FALSE
+) %>%
+  pamngr::ppt_output("reg-vs-emer-claims.png")
