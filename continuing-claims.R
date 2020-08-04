@@ -4,6 +4,17 @@ p <- readxl::read_excel(path = "data.xlsx", sheet = "injcuito", skip = 4) %>%
   ggplot2::ggplot(ggplot2::aes(dates, continuing_claims)) +
   ggplot2::geom_line(size = 2, color = "#850237") 
 
+dat <- pamngr::get_data("injcuito") %>%
+  magrittr::set_colnames(c("dates", "Continuing Claims")) %>%
+  tail(20) %>%
+  reshape2::melt(id.vars = "dates") %>%
+  pamngr::barplot() %>%
+  pamngr::pam_plot(
+    plot_title = "Continuing Claims",
+    plot_subtitle = "Thousands"
+  ) %>%
+  pamngr::all_output("continuing-claims")
+
 p %>%
   pamngr::pam_plot(
     plot_title = "Continuing Unemployment Claims",
