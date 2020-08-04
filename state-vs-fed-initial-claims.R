@@ -1,8 +1,7 @@
-devtools::install_github("davidallen02/pamngr")
 library(magrittr)
 
-state.claims <- readxl::read_excel(path = "data.xlsx", sheet = "injcjc", skip = 2)
-fed.claims   <- readxl::read_excel(path = "data.xlsx", sheet = "injcpua", skip = 2)
+state.claims <- readxl::read_excel(path = "data.xlsx", sheet = "injcjc", skip = 4)
+fed.claims   <- readxl::read_excel(path = "data.xlsx", sheet = "injcpua", skip = 4)
 
 claims <- state.claims %>%
   dplyr::left_join(fed.claims, by = "Dates") %>%
@@ -22,16 +21,17 @@ p <- claims %>%
   ggplot2::scale_fill_manual(values = c("black", "#850237"))
 
 p %>%
-  pamngr::pam.plot(
-    plot.title    = "Initial Unemployment Claims",
-    plot.subtitle = "Thousands") %>%
-  pamngr::ppt_output("initial-claims.png")
+  pamngr::pam_plot(
+    plot_title    = "Initial Unemployment Claims",
+    plot_subtitle = "Thousands") %>%
+  pamngr::all_output("initial-claims")
 
 q <- p + ggplot2::facet_wrap(ggplot2::vars(variable), ncol = 2) 
 
-q %>% pamngr::pam.plot(
-  plot.title = "Initial Unemployment Claims",
-  plot.subtitle = "Thousands",
-  show.legend = FALSE
+q %>% pamngr::pam_plot(
+  plot_title = "Initial Unemployment Claims",
+  plot_subtitle = "Thousands",
+  show_legend = FALSE,
+  caption = FALSE
 ) %>%
-  pamngr::ppt_output("reg-vs-emer-claims.png")
+  pamngr::all_output("reg-vs-emer-claims")
