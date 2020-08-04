@@ -50,7 +50,7 @@ q <- regular %>%
   dplyr::left_join(emergency, by = "dates") %>% 
   dplyr::ungroup() %>%
   dplyr::mutate(emergency = emergency %>% tidyr::replace_na(0)) %>%
-  dplyr::slice_max(order_by = dates, n = 20) %>%
+ tail(20) %>%
   magrittr::set_colnames(c("dates", "Regular Programs","Emergency Programs")) %>%
   reshape2::melt(id.vars = "dates") %>%
   ggplot2::ggplot(ggplot2::aes(dates, value, fill = variable)) + 
