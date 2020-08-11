@@ -1,6 +1,7 @@
 p <- readxl::read_excel(path = "data.xlsx", sheet = "injcuito", skip = 4) %>%
   magrittr::set_colnames(c("dates","continuing_claims")) %>%
-  dplyr::slice_max(dates, n = 52) %>%
+  tail(52) %>%
+  # dplyr::slice_max(dates, n = 52) %>%
   ggplot2::ggplot(ggplot2::aes(dates, continuing_claims)) +
   ggplot2::geom_line(size = 2, color = "#850237") 
 
