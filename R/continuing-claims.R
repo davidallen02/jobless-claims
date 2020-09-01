@@ -1,4 +1,5 @@
-p <- readxl::read_excel(path = "data.xlsx", sheet = "injcuito", skip = 4) %>%
+p <- pamngr::get_data("injcuito") %>%
+# p <- readxl::read_excel(path = "data.xlsx", sheet = "injcuito", skip = 4) %>%
   magrittr::set_colnames(c("dates","continuing_claims")) %>%
   tail(52) %>%
   # dplyr::slice_max(dates, n = 52) %>%
@@ -67,7 +68,7 @@ q <- regular %>%
   reshape2::melt(id.vars = "dates") %>%
   ggplot2::ggplot(ggplot2::aes(dates, value, fill = variable)) + 
   ggplot2::geom_area() +
-  ggplot2::scale_fill_manual(values = c("#850237", "black")) 
+  ggplot2::scale_fill_manual(values = pamngr::pam.pal()) 
 
 
 q %>%
