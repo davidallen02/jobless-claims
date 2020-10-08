@@ -1,3 +1,5 @@
+library(magrittr)
+
 p <- pamngr::get_data("injcuito") %>%
 # p <- readxl::read_excel(path = "data.xlsx", sheet = "injcuito", skip = 4) %>%
   magrittr::set_colnames(c("dates","continuing_claims")) %>%
