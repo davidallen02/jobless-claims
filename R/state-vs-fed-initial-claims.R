@@ -10,7 +10,8 @@ p<- dat %>%
   pamngr::barplot() %>%
   pamngr::pam_plot(
     plot_title = "Initial Unemployment Claims",
-    plot_subtitle = "Thousands"
+    plot_subtitle = "Thousands",
+    show_legend = FALSE
   )
 
 p <- p + ggplot2::facet_wrap(ggplot2::vars(variable), ncol = 2) 
